@@ -9,8 +9,8 @@ def read():
     ctype = 1
     xf = 0
     datalist=[]
-
-    for i in range(21,30):
+    # for i in range(1:nrows):
+    for i in range(1,nrows):
         datadict={}
         name=table.cell(i,0).value
         address=table.cell(i,5).value

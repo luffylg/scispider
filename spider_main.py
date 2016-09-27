@@ -128,13 +128,19 @@ class SpiderMain(object):
             articles=[]
             article={}
             s = requests.Session()
-            r = s.post(root_url,data=self.form_data,headers=self.hearders)
+            r2 = s.post(root_url,data=self.form_data,headers=self.hearders)
+            newurl='https://apps.webofknowledge.com/summary.do?product=WOS&parentProduct=WOS&search_mode=GeneralSearch&qid=1&SID='+sid+'&page=1&action=changePageSize&pageSize=50'
+            # 构造url一页显示50条
+            r=s.get(newurl)
             fout = open('output.html', 'w',encoding="UTF-8")
             fout.write(r.text)
             soup=BeautifulSoup(open('output.html','r',encoding="UTF-8"),'html.parser')
             result_articles=soup.find_all('div', class_="search-results")
             if len(result_articles)!=0:
-                results=result_articles[0].find_all('div',class_="search-results-item")
+                results=[]
+                for result_article in result_articles:
+                    results+= result_article.find_all('div',class_="search-results-item")
+                # results=result_articles[0].find_all('div',class_="search-results-item")
                 for result in results:
                     article={}
                     date=result.find_all('span',class_="data_bold")[-1]
@@ -201,7 +207,7 @@ if __name__=="__main__":
     mon={1:"JAN",2:"FEB",3:"MAR",4:"APR",5:"MAY",6:"JUN",7:"JUL",8:"AUG",9:"SEP",10:"OCT",11:"NOV",12:"DEC"}
 
     # 月份和年份在此修改
-    month=mon[7]
+    month=mon[6]
     year=2016
     datalist=xlsReader.read()
     for index,data in enumerate(datalist):
